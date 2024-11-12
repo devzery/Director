@@ -14,7 +14,7 @@ from logging.config import dictConfig
 
 from director.entrypoint.api.routes import agent_bp, session_bp, videodb_bp, config_bp
 from director.entrypoint.api.socket_io import ChatNamespace
-from devzery.flask.middleware import DevzeryFlaskMiddleware
+from devzery import Devzery
 
 from dotenv import load_dotenv
 
@@ -32,12 +32,13 @@ def create_app(app_config: object):
     """
     app = Flask(__name__)
 
-    middleware = DevzeryFlaskMiddleware(
-        app=app,
-        api_key=os.getenv("DEVZERY_API_KEY"),
-        source_name='BACKEND'
-        )
+    client = Devzery(
+        source_name="test"
+    )
 
+    client.flask_middleware(app)
+
+    client.requests_middleware()
 
     # Set the app config
     app.config.from_object(app_config)
