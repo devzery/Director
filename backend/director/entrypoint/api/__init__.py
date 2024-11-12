@@ -6,6 +6,7 @@ Create an application factory function, which will be used to create a new app i
 docs: https://flask.palletsprojects.com/en/2.3.x/patterns/appfactories/
 """
 
+import os
 from flask_cors import CORS
 from flask import Flask
 from flask_socketio import SocketIO
@@ -13,6 +14,7 @@ from logging.config import dictConfig
 
 from director.entrypoint.api.routes import agent_bp, session_bp, videodb_bp, config_bp
 from director.entrypoint.api.socket_io import ChatNamespace
+from devzery.flask.middleware import DevzeryFlaskMiddleware
 
 from dotenv import load_dotenv
 
@@ -29,6 +31,13 @@ def create_app(app_config: object):
     :return: A Flask app.
     """
     app = Flask(__name__)
+
+    middleware = DevzeryFlaskMiddleware(
+        app=app,
+        api_key=os.getenv("DEVZERY_API_KEY"),
+        source_name='BACKEND'
+        )
+
 
     # Set the app config
     app.config.from_object(app_config)
