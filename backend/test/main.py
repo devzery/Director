@@ -78,11 +78,12 @@ async def main():
 
         logger.info("All items processed, generating report")
         
-        with open("test/data/evaluation_report.json", "w") as f:
+        now_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        with open("test/results/evaluation_report-{now_str}.json", "w") as f:
             json.dump(eval_results, f, indent=4)
         logger.info("Evaluation report JSON saved")
         
-        now_str = datetime.now().strftime("%Y%m%d_%H%M%S")
         create_html_report(eval_results, f"test/results/evaluation_report-{now_str}.html")
         logger.info("HTML report generated successfully")
         
